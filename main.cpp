@@ -1,22 +1,25 @@
 #include <iostream>
 #include <cstdio>
+#include <string.h>
 #include "basecjk.h"
 
 using namespace std;
 
-int main ()
+int main (int argc,char *argv[])
 {
-    locale::global(locale(""));
-    ios::sync_with_stdio(false);
-    char test_buff[] = {"\x61\x00\x00\x00\x00\x00\x00\x61\x00\x00\x00\x00\xff\xff\x00\xff\xff\xff\x0f\x00"};
-
-    string bs = BaseCJK::bcjkencodeutf8(reinterpret_cast<BaseCJK::BYTE *>(test_buff), sizeof(test_buff) - 1);
-    cout<<bs<<endl;
-    wcout<<BaseCJK::bcjkencodewchar(reinterpret_cast<BaseCJK::BYTE *>(test_buff), sizeof(test_buff) - 1)<<endl;
-    auto v = BaseCJK::bcjkdecodeutf8(bs);
-    for(auto b:v)
+    if(argc!=3) return 1;
+    if(string(argv[1]) == "e")
     {
-        printf(" %02x",b);
+        cout<<BaseCJK::bcjkencodeutf8(reinterpret_cast<BaseCJK::BYTE *>(argv[2]),strlen(argv[2]))<<endl;
+    }
+    if(string(argv[1]) == "d")
+    {
+        auto v = BaseCJK::bcjkdecodeutf8(string(argv[2]));
+        for (auto b:v)
+        {
+            printf("%c", b);
+        }
+        putchar('\n');
     }
     return 0;
 }
